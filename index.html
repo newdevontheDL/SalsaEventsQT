@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Queenstown Salsa Events</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      margin: 0;
+      background: #0b1020;
+      color: #f5f5f5;
+    }
+
+    header {
+      padding: 1.5rem 1rem;
+      text-align: center;
+      background: radial-gradient(circle at top, #ff4b6e, #0b1020 60%);
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 1.8rem;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    header p {
+      margin: 0.4rem 0 0;
+      opacity: 0.9;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 1.5rem auto 3rem;
+      padding: 0 1rem;
+    }
+
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .filter-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    button.filter {
+      border-radius: 999px;
+      border: 1px solid #ff4b6e;
+      padding: 0.4rem 0.9rem;
+      background: transparent;
+      color: #ffb3c3;
+      cursor: pointer;
+      font-size: 0.9rem;
+      transition: background 0.15s, color 0.15s, transform 0.05s;
+    }
+
+    button.filter.active {
+      background: #ff4b6e;
+      color: #0b1020;
+      font-weight: 600;
+    }
+
+    button.filter:hover {
+      transform: translateY(-1px);
+    }
+
+    .info-text {
+      font-size: 0.8rem;
+      opacity: 0.7;
+    }
+
+    .events-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1rem;
+    }
+
+    .event-card {
+      background: #15192a;
+      border-radius: 12px;
+      padding: 0.9rem 1rem;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+    }
+
+    .event-header {
+      display: flex;
+      justify-content: space-between;
+      gap: 0.5rem;
+      align-items: center;
+    }
+
+    .event-title {
+      font-weight: 600;
+      font-size: 1rem;
+    }
+
+    .event-chip {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      padding: 0.15rem 0.5rem;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      opacity: 0.85;
+    }
+
+    .event-chip.class {
+      border-color: #4bc9ff;
+    }
+
+    .event-chip.social {
+      border-color: #ffb347;
+    }
+
+    .event-chip.special {
+      border-color: #9b5cff;
+    }
+
+    .event-date-time {
+      font-size: 0.9rem;
+      opacity: 0.9;
+    }
+
+    .event-location {
+      font-size: 0.85rem;
+      opacity: 0.8;
+    }
+
+    .event-link a {
+      font-size: 0.85rem;
+      color: #ffb3c3;
+      text-decoration: none;
+    }
+
+    .event-link a:hover {
+      text-decoration: underline;
+    }
+
+    .no-events {
+      text-align: center;
+      opacity: 0.8;
+      margin-top: 2rem;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Queenstown Salsa & Bachata</h1>
+    <p>Upcoming classes, socials & Latin events in Queenstown</p>
+  </header>
+
+  <main class="container">
+    <section class="controls">
+      <div class="filter-buttons">
+        <button class="filter active" data-type="all">All</button>
+        <button class="filter" data-type="class">Classes</button>
+        <button class="filter" data-type="social">Socials</button>
+        <button class="filter" data-type="special">Workshops & Specials</button>
+      </div>
+      <div class="info-text">
+        Events are shown in local Queenstown time.
+      </div>
+    </section>
+
+    <section id="events-container">
+      <div class="no-events">Loading events…</div>
+    </section>
+  </main>
