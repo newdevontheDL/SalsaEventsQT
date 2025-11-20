@@ -152,6 +152,19 @@
       opacity: 0.8;
       margin-top: 2rem;
     }
+
+    .event-image-wrapper {
+  margin: 0.4rem 0;
+  overflow: hidden;
+  border-radius: 8px;
+}
+
+.event-image {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+    
   </style>
 </head>
 <body>
@@ -183,29 +196,23 @@
     // dateTime must be ISO 8601 so JS Date can parse it reliably.
     // Example format: "2025-11-25T19:00:00"
     const events = [
-      {
-        title: "Cuban Salsa - Beginners",
-        dateTime: "2025-11-25T18:30:00",
-        location: "Te Atamira, Remarkables Park, Frankton",
-        type: "class",
-        link: "https://example.com/salsa-class"
-      },
-      {
-        title: "Bachata Social Night",
-        dateTime: "2025-11-27T20:00:00",
-        location: "Some Bar, Queenstown CBD",
-        type: "social",
-        link: "https://example.com/bachata-social"
-      },
-      {
-        title: "Salsa & Bachata Party + Intro Class",
-        dateTime: "2025-12-05T19:30:00",
-        location: "Queenstown Events Centre",
-        type: "special",
-        link: "https://example.com/latin-party"
-      }
-      // Add more here…
-    ];
+  {
+    title: "Cuban Salsa - Beginners",
+    dateTime: "2025-11-25T18:30:00",
+    location: "Te Atamira, Remarkables Park, Frankton",
+    type: "class",
+    link: "https://example.com/salsa-class",
+    imageUrl: "img/cuban-beginners.jpg"
+  },
+  {
+    title: "Bachata Social Night",
+    dateTime: "2025-11-27T20:00:00",
+    location: "Some Bar, Queenstown CBD",
+    type: "social",
+    link: "https://example.com/bachata-social",
+    imageUrl: "img/bachata-social-2025-11-27.jpg"
+  }
+];
 
     // ===== 2. RENDER LOGIC =====
     const eventsContainer = document.getElementById("events-container");
@@ -270,24 +277,32 @@
                   : "Event";
 
               return `
-                <article class="event-card">
-                  <div class="event-header">
-                    <div class="event-title">${evt.title}</div>
-                    <div class="event-chip ${chipClass}">${chipLabel}</div>
-                  </div>
-                  <div class="event-date-time">${formatDateTime(evt.dateObj)}</div>
-                  <div class="event-location">${evt.location}</div>
-                  ${
-                    evt.link
-                      ? `<div class="event-link"><a href="${evt.link}" target="_blank" rel="noopener noreferrer">More info / RSVP →</a></div>`
-                      : ""
-                  }
-                </article>
-              `;
-            })
-            .join("")}
-        </div>
-      `;
+  <article class="event-card">
+    <div class="event-header">
+      <div class="event-title">${evt.title}</div>
+      <div class="event-chip ${chipClass}">${chipLabel}</div>
+    </div>
+
+    ${evt.imageUrl ? `
+      <div class="event-image-wrapper">
+        <img
+          src="${evt.imageUrl}"
+          alt="${evt.title} poster"
+          class="event-image"
+          loading="lazy"
+        />
+      </div>
+    ` : ""}
+
+    <div class="event-date-time">${formatDateTime(evt.dateObj)}</div>
+    <div class="event-location">${evt.location}</div>
+    ${
+      evt.link
+        ? `<div class="event-link"><a href="${evt.link}" target="_blank" rel="noopener noreferrer">More info / RSVP →</a></div>`
+        : ""
+    }
+  </article>
+`;
 
       eventsContainer.innerHTML = cardsHtml;
     }
