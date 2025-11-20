@@ -154,17 +154,16 @@
     }
 
     .event-image-wrapper {
-  margin: 0.4rem 0;
-  overflow: hidden;
-  border-radius: 8px;
-}
+      margin: 0.4rem 0;
+      overflow: hidden;
+      border-radius: 8px;
+    }
 
-.event-image {
-  display: block;
-  width: 100%;
-  height: auto;
-}
-    
+    .event-image {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
   </style>
 </head>
 <body>
@@ -192,76 +191,78 @@
   </main>
 
   <script>
-  // ===== 1. DEFINE EVENTS =====
-  // Make sure all dates are in the future so they actually show
-  const events = [
-    {
-      title: "Bachata Social Night",
-      dateTime: "2025-12-05T20:00:00",
-      location: "Queenstown CBD",
-      type: "social",
-      link: "https://example.com/bachata-social",
-      imageUrl: "img/bachata-social-2025-12-05.jpg"
-    },
-    {
-      title: "Cuban Salsa - Beginners",
-      dateTime: "2025-12-03T18:30:00",
-      location: "Te Atamira, Remarkables Park, Frankton",
-      type: "class",
-      link: "https://example.com/cuban-beginners",
-      imageUrl: "img/social.png"
+    // ===== 1. EVENTS =====
+    const events = [
+      {
+        title: "Bachata Social Night",
+        dateTime: "2025-12-05T20:00:00",
+        location: "Queenstown CBD",
+        type: "social",
+        link: "https://example.com/bachata-social",
+        imageUrl: "img/bachata-social-2025-12-05.jpg"
+      },
+      {
+        title: "Cuban Salsa - Beginners",
+        dateTime: "2025-12-03T18:30:00",
+        location: "Te Atamira, Remarkables Park, Frankton",
+        type: "class",
+        link: "https://example.com/cuban-beginners",
+        imageUrl: "img/cuban-beginners.jpg"
+      }
+      // add more events here
+    ];
+
+    const eventsContainer = document.getElementById("events-container");
+    const filterButtons = document.querySelectorAll("button.filter");
+
+    function getLocalTodayMidnight() {
+      const now = new Date();
+      return new Date(now.getFullYear(), now.getMonth(), now.getDate());
     }
-    // Add more events here
-  ];
 
-  const eventsContainer = document.getElementById("events-container");
-  const filterButtons = document.querySelectorAll("button.filter");
-
-  function getLocalTodayMidnight() {
-    const now = new Date();
-    return new Date(now.getFullYear(), now.getMonth(), now.getDate());
-  }
-
-  function formatDateTime(date) {
-    const datePart = date.toLocaleDateString(undefined, {
-      weekday: "short",
-      day: "numeric",
-      month: "short"
-    });
-    const timePart = date.toLocaleTimeString(undefined, {
-      hour: "2-digit",
-      minute: "2-digit"
-    });
-    return `${datePart} · ${timePart}`;
-  }
-
-  function renderEvents(filterType = "all") {
-    const today = getLocalTodayMidnight();
-
-    const upcoming = events
-      .map(evt => ({
-        ...evt,
-        dateObj: new Date(evt.dateTime)
-      }))
-      .filter(evt => evt.dateObj >= today)
-      .sort((a, b) => a.dateObj - b.dateObj)
-      .filter(evt => {
-        if (filterType === "all") return true;
-        return evt.type === filterType;
+    function formatDateTime(date) {
+      const datePart = date.toLocaleDateString(undefined, {
+        weekday: "short",
+        day: "numeric",
+        month: "short"
       });
-
-    if (upcoming.length === 0) {
-      eventsContainer.innerHTML =
-        '<div class="no-events">No upcoming events for this category yet. Check back soon.</div>';
-      return;
+      const timePart = date.toLocaleTimeString(undefined, {
+        hour: "2-digit",
+        minute: "2-digit"
+      });
+      return datePart + " · " + timePart;
     }
 
-    const cardsHtml = `
-      <div class="events-list">
-        ${upcoming
-          .map(evt => {
-            const chipClass = evt.type || "other";
-            const chipLabel =
+    function renderEvents(filterType = "all") {
+      const today = getLocalTodayMidnight();
+
+      const upcoming = events
+        .map(function (evt) {
+          return Object.assign({}, evt, { dateObj: new Date(evt.dateTime) });
+        })
+        .filter(function (evt) {
+          return evt.dateObj >= today;
+        })
+        .sort(function (a, b) {
+          return a.dateObj - b.dateObj;
+        })
+        .filter(function (evt) {
+          if (filterType === "all") return true;
+          return evt.type === filterType;
+        });
+
+      if (upcoming.length === 0) {
+        eventsContainer.innerHTML =
+          '<div class="no-events">No upcoming events for this category yet. Check back soon.</div>';
+        return;
+      }
+
+      var cardsHtml =
+        '<div class="events-list">' +
+        upcoming
+          .map(function (evt) {
+            var chipClass = evt.type || "other";
+            var chipLabel =
               evt.type === "class"
                 ? "Class"
                 : evt.type === "social"
@@ -270,51 +271,49 @@
                 ? "Workshop / Special"
                 : "Event";
 
-            // NOTE: no nested backticks here, just string concatenation
-            const imageBlock = evt.imageUrl
+            var imageBlock = evt.imageUrl
               ? '<div class="event-image-wrapper">' +
                 '<img src="' + evt.imageUrl + '" alt="' + evt.title + ' poster" class="event-image" loading="lazy" />' +
-                '</div>'
+                "</div>"
               : "";
 
-            return `
-              <article class="event-card">
-                <div class="event-header">
-                  <div class="event-title">${evt.title}</div>
-                  <div class="event-chip ${chipClass}">${chipLabel}</div>
-                </div>
-                ${imageBlock}
-                <div class="event-date-time">${formatDateTime(evt.dateObj)}</div>
-                <div class="event-location">${evt.location}</div>
-                ${
-                  evt.link
-                    ? '<div class="event-link"><a href="' +
-                      evt.link +
-                      '" target="_blank" rel="noopener noreferrer">More info / RSVP →</a></div>'
-                    : ""
-                }
-              </article>
-            `;
+            var linkBlock = evt.link
+              ? '<div class="event-link"><a href="' +
+                evt.link +
+                '" target="_blank" rel="noopener noreferrer">More info / RSVP →</a></div>'
+              : "";
+
+            return (
+              '<article class="event-card">' +
+                '<div class="event-header">' +
+                  '<div class="event-title">' + evt.title + "</div>" +
+                  '<div class="event-chip ' + chipClass + '">' + chipLabel + "</div>" +
+                "</div>" +
+                imageBlock +
+                '<div class="event-date-time">' + formatDateTime(evt.dateObj) + "</div>" +
+                '<div class="event-location">' + evt.location + "</div>" +
+                linkBlock +
+              "</article>"
+            );
           })
-          .join("")}
-      </div>
-    `;
+          .join("") +
+        "</div>";
 
-    eventsContainer.innerHTML = cardsHtml;
-  }
+      eventsContainer.innerHTML = cardsHtml;
+    }
 
-  // Filter button handlers
-  filterButtons.forEach(btn => {
-    btn.addEventListener("click", () => {
-      filterButtons.forEach(b => b.classList.remove("active"));
-      btn.classList.add("active");
-      const type = btn.dataset.type;
-      renderEvents(type);
+    // filter buttons
+    filterButtons.forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        filterButtons.forEach(function (b) { b.classList.remove("active"); });
+        btn.classList.add("active");
+        var type = btn.dataset.type;
+        renderEvents(type);
+      });
     });
-  });
 
-  // Initial render
-  renderEvents("all");
-</script>
+    // initial render
+    renderEvents("all");
+  </script>
 </body>
 </html>
