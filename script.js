@@ -10,13 +10,13 @@ function getLocalTodayMidnight() {
 }
 
 function formatDateTime(date) {
-  const datePart = date.toLocaleDateString(undefined, {
+  const datePart = date.toLocaleDateString("en-NZ", {
     weekday: "short",
     day: "numeric",
     month: "short",
     year: "numeric"
   });
-  const timePart = date.toLocaleTimeString(undefined, {
+  const timePart = date.toLocaleTimeString("en-NZ", {
     hour: "2-digit",
     minute: "2-digit"
   });
