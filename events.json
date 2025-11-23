@@ -1173,5 +1173,6 @@
     "type": "class",
     "link": "https://www.instagram.com/queenstownsalsa/",
     "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR9mwl8r_ngEGrx7dSQu9ZMKgcKQHc5uE-IVw&s"
-  }
+  },
+  { "title": "Charlies Dance Class", "city": "CharlieTown", "style": "salsa", "dateTime": "2026-01-06T05:30:00.000Z", "endDateTime": "2026-01-06T06:30:00.000Z", "location": "Te Atamira, Remarkables Park, Frankton", "type": "class", "link": "https://example.com/cuban-beginners", "imageUrl": "img/cuban-beginners.png" },
 ]
