@@ -494,8 +494,8 @@
         const endDateObj = new Date(current.getTime());
         endDateObj.setHours(endTimeParts.hour, endTimeParts.minute, 0, 0);
 
-        const isoStart = startDateObj.toISOString().slice(0, 19);
-        const isoEnd = endDateObj.toISOString().slice(0, 19);
+        const isoStart = startDateObj.toISOString();
+        const isoEnd = endDateObj.toISOString();
 
         events.push({
           title,
