@@ -2,6 +2,7 @@ let allEvents = [];
 
 const eventsContainer = document.getElementById("events-container");
 const filterButtons = document.querySelectorAll("button.filter");
+const showPastToggle = document.getElementById("show-past-toggle"); // NEW
 
 function getLocalTodayMidnight() {
   const now = new Date();
@@ -35,7 +36,13 @@ function renderEvents(filterType = "all") {
       ...evt,
       dateObj: new Date(evt.dateTime)
     }))
-    .filter(evt => evt.dateObj >= today)
+    .filter(evt => {
+      // If "Show past events" is checked, skip date filtering
+      if (showPastToggle && showPastToggle.checked) {
+        return true;
+      }
+      return evt.dateObj >= today;
+    })
     .sort((a, b) => a.dateObj - b.dateObj)
     .filter(evt => {
       if (filterType === "all") return true;
@@ -119,6 +126,15 @@ filterButtons.forEach(btn => {
     renderEvents(type);
   });
 });
+
+// Wire up "Show past events" toggle
+if (showPastToggle) {
+  showPastToggle.addEventListener("change", () => {
+    const activeBtn = document.querySelector("button.filter.active");
+    const type = activeBtn ? activeBtn.dataset.type : "all";
+    renderEvents(type);
+  });
+}
 
 // Initial load
 loadEvents();
