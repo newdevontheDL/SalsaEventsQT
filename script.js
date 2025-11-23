@@ -13,7 +13,8 @@ function formatDateTime(date) {
   const datePart = date.toLocaleDateString(undefined, {
     weekday: "short",
     day: "numeric",
-    month: "short"
+    month: "short",
+    year: "numeric"
   });
   const timePart = date.toLocaleTimeString(undefined, {
     hour: "2-digit",
