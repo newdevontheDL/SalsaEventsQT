@@ -103,7 +103,7 @@
     <h1>Salsa Events JSON Generator</h1>
     <p class="hint">
       Fill in up to 4 weekly classes. Use the date/time pickers. Click <strong>Generate JSON</strong>, then paste the output into <code>events.json</code>.
-      Each generated event has <code>dateTime</code> (start) and <code>endDateTime</code> (end).
+      Each generated event has <code>dateTime</code> (start), <code>endDateTime</code> (end), <code>city</code> and <code>style</code>.
     </p>
 
     <div class="grid">
@@ -117,6 +117,14 @@
         <label>
           Title
           <input id="c1_title" value="Cuban Salsa - Beginners">
+        </label>
+        <label>
+          City
+          <input id="c1_city" value="Queenstown">
+        </label>
+        <label>
+          Style
+          <select id="c1_style" class="style-select"></select>
         </label>
         <label>
           Weekday
@@ -180,6 +188,14 @@
           <input id="c2_title" value="Cuban Salsa - Improvers">
         </label>
         <label>
+          City
+          <input id="c2_city" value="Queenstown">
+        </label>
+        <label>
+          Style
+          <select id="c2_style" class="style-select"></select>
+        </label>
+        <label>
           Weekday
           <select id="c2_weekday">
             <option value="1">Monday</option>
@@ -239,6 +255,14 @@
         <label>
           Title
           <input id="c3_title" value="Bachata - Beginners">
+        </label>
+        <label>
+          City
+          <input id="c3_city" value="Queenstown">
+        </label>
+        <label>
+          Style
+          <select id="c3_style" class="style-select"></select>
         </label>
         <label>
           Weekday
@@ -302,6 +326,14 @@
           <input id="c4_title" value="Bachata - Open Level">
         </label>
         <label>
+          City
+          <input id="c4_city" value="Queenstown">
+        </label>
+        <label>
+          Style
+          <select id="c4_style" class="style-select"></select>
+        </label>
+        <label>
           Weekday
           <select id="c4_weekday">
             <option value="1">Monday</option>
@@ -356,11 +388,11 @@
       <h2>One-off Events (optional)</h2>
       <p class="hint">
         Enter extra events as valid JSON array items (no surrounding <code>[ ]</code>).<br>
-        They can include <code>endDateTime</code> if you want, e.g.:<br>
-        <code>{ "title": "Ritmo", "dateTime": "2026-02-13T18:30:00", "endDateTime": "2026-02-15T23:59:00", ... }</code>
+        They can include <code>endDateTime</code>, <code>city</code> and <code>style</code> if you want, e.g.:<br>
+        <code>{ "title": "Ritmo", "dateTime": "2026-02-13T18:30:00", "endDateTime": "2026-02-15T23:59:00", "city": "Queenstown", "style": "salsa", ... }</code>
       </p>
       <textarea id="oneOffInput" placeholder='Example:
-{ "title": "Ritmo Queenstown", "dateTime": "2026-02-13T18:30:00", "endDateTime": "2026-02-15T23:59:00", "location": "Te Atamira, Remarkables Park, Frankton", "type": "special", "link": "https://events.humanitix.com/ritmo-queenstown", "imageUrl": "https://..." }'></textarea>
+{ "title": "Ritmo Queenstown", "dateTime": "2026-02-13T18:30:00", "endDateTime": "2026-02-15T23:59:00", "city": "Queenstown", "location": "Te Atamira, Remarkables Park, Frankton", "type": "special", "style": "salsa", "link": "https://events.humanitix.com/ritmo-queenstown", "imageUrl": "https://..." }'></textarea>
     </div>
 
     <div class="error" id="errorBox" style="display:none;"></div>
@@ -373,6 +405,29 @@
   </div>
 
   <script>
+    // Load dance styles from styles.json and populate all .style-select dropdowns
+    async function loadStyles() {
+      try {
+        const res = await fetch("styles.json?cache=" + Date.now());
+        if (!res.ok) throw new Error("HTTP " + res.status);
+        const styles = await res.json();
+
+        const selects = document.querySelectorAll(".style-select");
+        selects.forEach(sel => {
+          sel.innerHTML = "";
+          styles.forEach(style => {
+            const opt = document.createElement("option");
+            const value = String(style).toLowerCase();
+            opt.value = value;
+            opt.textContent = style.charAt(0).toUpperCase() + style.slice(1);
+            sel.appendChild(opt);
+          });
+        });
+      } catch (err) {
+        console.error("Failed to load styles.json:", err);
+      }
+    }
+
     function parseDateParts(isoDate) {
       const parts = isoDate.split("-");
       if (parts.length !== 3) return null;
@@ -399,6 +454,8 @@
     function generateWeeklyFromPattern(pattern) {
       const {
         title,
+        city,
+        style,
         weekday,
         startTime,
         endTime,
@@ -442,6 +499,8 @@
 
         events.push({
           title,
+          city,
+          style,
           dateTime: isoStart,
           endDateTime: isoEnd,
           location,
@@ -461,6 +520,8 @@
       if (!enabled) return null;
 
       const title = document.getElementById(prefix + "_title").value.trim();
+      const city = document.getElementById(prefix + "_city").value.trim();
+      const style = document.getElementById(prefix + "_style").value.trim();
       const weekday = Number(document.getElementById(prefix + "_weekday").value);
       const startTime = document.getElementById(prefix + "_time_start").value.trim();
       const endTime = document.getElementById(prefix + "_time_end").value.trim();
@@ -477,6 +538,8 @@
 
       return {
         title,
+        city,
+        style,
         weekday,
         startTime,
         endTime,
@@ -534,6 +597,9 @@
         errorBox.style.display = "block";
       }
     });
+
+    // Kick off style loading once DOM is ready enough
+    loadStyles();
   </script>
 </body>
 </html>
