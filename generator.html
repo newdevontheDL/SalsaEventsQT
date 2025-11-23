@@ -102,7 +102,8 @@
   <div class="wrapper">
     <h1>Salsa Events JSON Generator</h1>
     <p class="hint">
-      Fill in up to 4 recurring classes (weekly). Click <strong>Generate JSON</strong>, then copy the output into <code>events.json</code> in your repo.
+      Fill in up to 4 weekly classes. Use the date/time pickers. Click <strong>Generate JSON</strong>, then paste the output into <code>events.json</code>.
+      Each generated event has <code>dateTime</code> (start) and <code>endDateTime</code> (end).
     </p>
 
     <div class="grid">
@@ -130,16 +131,20 @@
           </select>
         </label>
         <label>
-          Time (24h, HH:MM)
-          <input id="c1_time" value="18:30">
+          Start time
+          <input type="time" id="c1_time_start" value="18:30" step="60">
         </label>
         <label>
-          Start date (YYYY-MM-DD)
-          <input id="c1_start" value="2026-01-06">
+          End time
+          <input type="time" id="c1_time_end" value="19:30" step="60">
         </label>
         <label>
-          End date (YYYY-MM-DD)
-          <input id="c1_end" value="2026-03-31">
+          Start date
+          <input type="date" id="c1_start" value="2026-01-06">
+        </label>
+        <label>
+          End date
+          <input type="date" id="c1_end" value="2026-03-31">
         </label>
         <label>
           Location
@@ -187,16 +192,20 @@
           </select>
         </label>
         <label>
-          Time (24h, HH:MM)
-          <input id="c2_time" value="19:45">
+          Start time
+          <input type="time" id="c2_time_start" value="19:45" step="60">
         </label>
         <label>
-          Start date (YYYY-MM-DD)
-          <input id="c2_start" value="2026-01-06">
+          End time
+          <input type="time" id="c2_time_end" value="20:45" step="60">
         </label>
         <label>
-          End date (YYYY-MM-DD)
-          <input id="c2_end" value="2026-03-31">
+          Start date
+          <input type="date" id="c2_start" value="2026-01-06">
+        </label>
+        <label>
+          End date
+          <input type="date" id="c2_end" value="2026-03-31">
         </label>
         <label>
           Location
@@ -244,16 +253,20 @@
           </select>
         </label>
         <label>
-          Time (24h, HH:MM)
-          <input id="c3_time" value="18:30">
+          Start time
+          <input type="time" id="c3_time_start" value="18:30" step="60">
         </label>
         <label>
-          Start date (YYYY-MM-DD)
-          <input id="c3_start" value="2026-01-08">
+          End time
+          <input type="time" id="c3_time_end" value="19:30" step="60">
         </label>
         <label>
-          End date (YYYY-MM-DD)
-          <input id="c3_end" value="2026-04-02">
+          Start date
+          <input type="date" id="c3_start" value="2026-01-08">
+        </label>
+        <label>
+          End date
+          <input type="date" id="c3_end" value="2026-04-02">
         </label>
         <label>
           Location
@@ -301,16 +314,20 @@
           </select>
         </label>
         <label>
-          Time (24h, HH:MM)
-          <input id="c4_time" value="19:45">
+          Start time
+          <input type="time" id="c4_time_start" value="19:45" step="60">
         </label>
         <label>
-          Start date (YYYY-MM-DD)
-          <input id="c4_start" value="2026-01-08">
+          End time
+          <input type="time" id="c4_time_end" value="20:45" step="60">
         </label>
         <label>
-          End date (YYYY-MM-DD)
-          <input id="c4_end" value="2026-04-02">
+          Start date
+          <input type="date" id="c4_start" value="2026-01-08">
+        </label>
+        <label>
+          End date
+          <input type="date" id="c4_end" value="2026-04-02">
         </label>
         <label>
           Location
@@ -338,11 +355,12 @@
     <div class="card">
       <h2>One-off Events (optional)</h2>
       <p class="hint">
-        Enter extra events as valid JSON array items (no surrounding <code>[ ]</code>), e.g.:<br>
-        <code>{ "title": "Ritmo", "dateTime": "2026-03-13T18:30:00", ... }</code>
+        Enter extra events as valid JSON array items (no surrounding <code>[ ]</code>).<br>
+        They can include <code>endDateTime</code> if you want, e.g.:<br>
+        <code>{ "title": "Ritmo", "dateTime": "2026-02-13T18:30:00", "endDateTime": "2026-02-15T23:59:00", ... }</code>
       </p>
       <textarea id="oneOffInput" placeholder='Example:
-{ "title": "Ritmo Queenstown", "dateTime": "2026-03-13T18:30:00", "location": "Te Atamira, Remarkables Park, Frankton", "type": "special", "link": "https://events.humanitix.com/ritmo-queenstown", "imageUrl": "https://..." }'></textarea>
+{ "title": "Ritmo Queenstown", "dateTime": "2026-02-13T18:30:00", "endDateTime": "2026-02-15T23:59:00", "location": "Te Atamira, Remarkables Park, Frankton", "type": "special", "link": "https://events.humanitix.com/ritmo-queenstown", "imageUrl": "https://..." }'></textarea>
     </div>
 
     <div class="error" id="errorBox" style="display:none;"></div>
@@ -365,11 +383,25 @@
       return { year, month, day };
     }
 
+    function parseTimeParts(timeStr, label) {
+      const parts = timeStr.split(":");
+      if (parts.length !== 2) {
+        throw new Error("Invalid " + label + " time: " + timeStr);
+      }
+      const hour = Number(parts[0]);
+      const minute = Number(parts[1]);
+      if (Number.isNaN(hour) || Number.isNaN(minute)) {
+        throw new Error("Invalid " + label + " time: " + timeStr);
+      }
+      return { hour, minute };
+    }
+
     function generateWeeklyFromPattern(pattern) {
       const {
         title,
         weekday,
-        time,
+        startTime,
+        endTime,
         startDate,
         endDate,
         location,
@@ -384,15 +416,8 @@
         throw new Error("Invalid date in pattern: " + title);
       }
 
-      const timeParts = time.split(":");
-      if (timeParts.length !== 2) {
-        throw new Error("Invalid time in pattern: " + title);
-      }
-      const hour = Number(timeParts[0]);
-      const minute = Number(timeParts[1]);
-      if (Number.isNaN(hour) || Number.isNaN(minute)) {
-        throw new Error("Invalid time in pattern: " + title);
-      }
+      const startTimeParts = parseTimeParts(startTime, "start");
+      const endTimeParts = parseTimeParts(endTime, "end");
 
       const start = new Date(startParts.year, startParts.month - 1, startParts.day);
       const end = new Date(endParts.year, endParts.month - 1, endParts.day);
@@ -406,14 +431,19 @@
       const current = new Date(start.getTime());
 
       while (current <= end) {
-        const eventDate = new Date(current.getTime());
-        eventDate.setHours(hour, minute, 0, 0);
+        const startDateObj = new Date(current.getTime());
+        startDateObj.setHours(startTimeParts.hour, startTimeParts.minute, 0, 0);
 
-        const isoDateTime = eventDate.toISOString().slice(0, 19); // "YYYY-MM-DDTHH:MM:SS"
+        const endDateObj = new Date(current.getTime());
+        endDateObj.setHours(endTimeParts.hour, endTimeParts.minute, 0, 0);
+
+        const isoStart = startDateObj.toISOString().slice(0, 19);
+        const isoEnd = endDateObj.toISOString().slice(0, 19);
 
         events.push({
           title,
-          dateTime: isoDateTime,
+          dateTime: isoStart,
+          endDateTime: isoEnd,
           location,
           type,
           link,
@@ -432,7 +462,8 @@
 
       const title = document.getElementById(prefix + "_title").value.trim();
       const weekday = Number(document.getElementById(prefix + "_weekday").value);
-      const time = document.getElementById(prefix + "_time").value.trim();
+      const startTime = document.getElementById(prefix + "_time_start").value.trim();
+      const endTime = document.getElementById(prefix + "_time_end").value.trim();
       const startDate = document.getElementById(prefix + "_start").value.trim();
       const endDate = document.getElementById(prefix + "_end").value.trim();
       const location = document.getElementById(prefix + "_location").value.trim();
@@ -440,14 +471,15 @@
       const link = document.getElementById(prefix + "_link").value.trim();
       const imageUrl = document.getElementById(prefix + "_image").value.trim();
 
-      if (!title || !startDate || !endDate || !time) {
+      if (!title || !startDate || !endDate || !startTime || !endTime) {
         return null; // skip incomplete
       }
 
       return {
         title,
         weekday,
-        time,
+        startTime,
+        endTime,
         startDate,
         endDate,
         location,
@@ -460,7 +492,6 @@
     function parseOneOffEvents(raw) {
       const trimmed = raw.trim();
       if (!trimmed) return [];
-      // Wrap in [ ] to parse as array
       try {
         const json = JSON.parse("[" + trimmed + "]");
         if (!Array.isArray(json)) return [];
