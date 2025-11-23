@@ -32,17 +32,18 @@ function formatEventDate(start, end) {
   const dateOptions = {
     weekday: "short",
     day: "numeric",
-    month: "short"
+    month: "short",
+    year : "numeric"
   };
   const timeOptions = {
     hour: "2-digit",
     minute: "2-digit"
   };
 
-  const startDatePart = start.toLocaleDateString(undefined, dateOptions);
-  const endDatePart = end.toLocaleDateString(undefined, dateOptions);
-  const startTimePart = start.toLocaleTimeString(undefined, timeOptions);
-  const endTimePart = end.toLocaleTimeString(undefined, timeOptions);
+  const startDatePart = start.toLocaleDateString("en-NZ", dateOptions);
+  const endDatePart = end.toLocaleDateString("en-NZ", dateOptions);
+  const startTimePart = start.toLocaleTimeString("en-NZ", timeOptions);
+  const endTimePart = end.toLocaleTimeString("en-NZ", timeOptions);
 
   // Same day
   if (isSameDay(start, end)) {
