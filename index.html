@@ -2,38 +2,47 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Queenstown Salsa Events</title>
+  <title>Queenstown Salsa & Bachata</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
   <header>
     <h1>Queenstown Salsa & Bachata</h1>
-    <p>Upcoming classes, socials & Latin events in Queenstown</p>
+    <p>Upcoming classes, socials & Latin events in Queenstown and beyond.</p>
   </header>
 
-  <main class="container">
+  <div class="container">
     <section class="controls">
-      <div class="filter-buttons">
+      <div class="filter-row">
         <button class="filter active" data-type="all">All</button>
         <button class="filter" data-type="class">Classes</button>
         <button class="filter" data-type="social">Socials</button>
         <button class="filter" data-type="special">Workshops & Specials</button>
       </div>
-<label class="show-past-toggle" style="font-size: 0.8rem; opacity: 0.8;">
-  <input type="checkbox" id="show-past-toggle" />
-  Show past events
-</label>
 
-      <div class="info-text">
-        Events are shown in local Queenstown time.
+      <div class="filter-row secondary">
+        <div class="select-group">
+          <label for="cityFilter">City</label>
+          <select id="cityFilter">
+            <option value="all">All cities</option>
+          </select>
+        </div>
+        <div class="select-group">
+          <label for="styleFilter">Style</label>
+          <select id="styleFilter">
+            <option value="all">All styles</option>
+          </select>
+        </div>
       </div>
+
+      <p class="timezone-note">Events are shown in local Queenstown time.</p>
     </section>
 
-    <section id="events-container">
-      <div class="no-events">Loading events…</div>
-    </section>
-  </main>
+    <main id="events-container">
+      Loading events…
+    </main>
+  </div>
 
   <script src="script.js"></script>
 </body>
