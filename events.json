@@ -7,6 +7,7 @@
       "type": "special",
       "venue": "te-atamira",
       "dateTime": "2026-02-13T18:30:00",
+      "endDateTime": "2026-02-13T21:00:00",
       "link": "https://events.humanitix.com/ritmo-queenstown",
       "imageUrl": "https://cdn.filestackcontent.com/cache=expiry:max/resize=width:1250/output=format:webp,quality:40/compress/HQ5QezzSSp6TsEajDDbY"
     },
@@ -17,6 +18,7 @@
       "type": "class",
       "venue": "te-atamira",
       "dateTime": "2025-11-24T06:00:00",
+      "endDateTime": "2025-11-24T07:00:00",
       "link": "https://www.instagram.com/queenstownsalsa/",
       "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR9mwl8r_ngEGrx7dSQu9ZMKgcKQHc5uE-IVw&s"
     }
