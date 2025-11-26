@@ -1,0 +1,43 @@
+{
+  "cities": [
+    { "id": "queenstown", "name": "Queenstown" },
+    { "id": "wanaka", "name": "Wānaka" },
+    { "id": "cromwell", "name": "Cromwell" }
+  ],
+
+  "styles": [
+    { "id": "salsa", "name": "Salsa", "emoji": "💃" },
+    { "id": "bachata", "name": "Bachata", "emoji": "🕺" },
+    { "id": "zouk", "name": "Zouk", "emoji": "✨" },
+    { "id": "kizomba", "name": "Kizomba", "emoji": "🔥" },
+    { "id": "tango", "name": "Tango", "emoji": "❤️" },
+    { "id": "forro", "name": "Forró", "emoji": "🎶" }
+  ],
+
+  "types": [
+    { "id": "class", "label": "Class", "emoji": "📘" },
+    { "id": "social", "label": "Social Night", "emoji": "🎉" },
+    { "id": "special", "label": "Workshop / Special", "emoji": "⭐" }
+  ],
+
+  "venues": [
+    {
+      "id": "te-atamira",
+      "name": "Te Atamira",
+      "city": "queenstown",
+      "address": "Remarkables Park, Frankton"
+    },
+    {
+      "id": "world-bar",
+      "name": "World Bar",
+      "city": "queenstown",
+      "address": "12 Church Street"
+    },
+    {
+      "id": "ritmo-hall",
+      "name": "Ritmo Hall",
+      "city": "queenstown",
+      "address": "Event Venue TBC"
+    }
+  ]
+}
