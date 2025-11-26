@@ -1,282 +1,268 @@
+const META_URL = "meta.json";
+const EVENTS_URL = "events.json";
+
+// state
+let metaData = null;
 let allEvents = [];
+let activeTypeFilter = "all";
+let activeCityFilter = "all";
+let activeStyleFilter = "all";
 
-const eventsContainer = document.getElementById("events-container");
-const filterButtons = document.querySelectorAll("button.filter");
-const cityFilter = document.getElementById("cityFilter");
-const styleFilter = document.getElementById("styleFilter");
+document.addEventListener("DOMContentLoaded", () => {
+  init();
+});
 
-let activeType = "all";
-let activeCity = "all";
-let activeStyle = "all";
+async function init() {
+  try {
+    const [metaRes, eventsRes] = await Promise.all([
+      fetch(META_URL),
+      fetch(EVENTS_URL)
+    ]);
 
-function getLocalTodayMidnight() {
-  const now = new Date();
-  return new Date(now.getFullYear(), now.getMonth(), now.getDate());
-}
+    if (!metaRes.ok) throw new Error("Failed to load meta.json");
+    if (!eventsRes.ok) throw new Error("Failed to load events.json");
 
-function isSameDay(a, b) {
-  return (
-    a.getFullYear() === b.getFullYear() &&
-    a.getMonth() === b.getMonth() &&
-    a.getDate() === b.getDate()
-  );
-}
+    metaData = await metaRes.json();
+    const eventsJson = await eventsRes.json();
 
-function capitalise(str) {
-  if (!str) return "";
-  const s = String(str);
-  return s.charAt(0).toUpperCase() + s.slice(1);
-}
+    // support both [ ... ] and { events: [ ... ] }
+    allEvents = Array.isArray(eventsJson)
+      ? eventsJson
+      : eventsJson.events || [];
 
-function formatEventDate(start, end) {
-  const dateOptions = {
-    weekday: "short",
-    day: "numeric",
-    month: "short",
-    year : "numeric"
-  };
-  const timeOptions = {
-    hour: "2-digit",
-    minute: "2-digit"
-  };
+    // sort by start date ascending
+    allEvents.sort((a, b) => new Date(a.dateTime) - new Date(b.dateTime));
 
-  const startDatePart = start.toLocaleDateString("en-NZ", dateOptions);
-  const endDatePart = end.toLocaleDateString("en-NZ", dateOptions);
-  const startTimePart = start.toLocaleTimeString("en-NZ", timeOptions);
-  const endTimePart = end.toLocaleTimeString("en-NZ", timeOptions);
-
-  // Same day
-  if (isSameDay(start, end)) {
-    if (startTimePart !== endTimePart) {
-      return startDatePart + " · " + startTimePart + "–" + endTimePart;
+    setupFilters();
+    renderEvents();
+  } catch (err) {
+    console.error(err);
+    const container = document.getElementById("events-container");
+    if (container) {
+      container.textContent = "Error loading events.";
     }
-    return startDatePart + " · " + startTimePart;
   }
-
-  // Multi-day
-  return (
-    startDatePart +
-    " · " +
-    startTimePart +
-    " – " +
-    endDatePart
-  );
 }
 
-function populateDropdown(selectEl, values, allLabel) {
-  if (!selectEl) return;
+/* ---------- LOOKUP HELPERS ---------- */
 
-  selectEl.innerHTML = "";
+function getCity(id) {
+  return metaData?.cities?.find(c => c.id === id) || null;
+}
 
-  const optAll = document.createElement("option");
-  optAll.value = "all";
-  optAll.textContent = allLabel;
-  selectEl.appendChild(optAll);
+function getStyle(id) {
+  return metaData?.styles?.find(s => s.id === id) || null;
+}
 
-  values.forEach((v) => {
-    if (!v) return;
-    const opt = document.createElement("option");
-    opt.value = v.toLowerCase();
-    opt.textContent = v;
-    selectEl.appendChild(opt);
+function getType(id) {
+  return metaData?.types?.find(t => t.id === id) || null;
+}
+
+function getVenue(id) {
+  return metaData?.venues?.find(v => v.id === id) || null;
+}
+
+/* ---------- FILTER UI SETUP ---------- */
+
+function setupFilters() {
+  setupTypeButtons();
+  setupCityFilter();
+  setupStyleFilter();
+}
+
+function setupTypeButtons() {
+  const buttons = document.querySelectorAll(".filter");
+  buttons.forEach(btn => {
+    btn.addEventListener("click", () => {
+      buttons.forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+      activeTypeFilter = btn.dataset.type || "all";
+      renderEvents();
+    });
   });
 }
 
-function buildUpcomingList() {
-  const today = getLocalTodayMidnight();
+function setupCityFilter() {
+  const select = document.getElementById("cityFilter");
+  if (!select || !metaData?.cities) return;
 
-  return allEvents
-    .map((evt) => {
-      const startObj = new Date(evt.dateTime);
-      const endObj = evt.endDateTime
-        ? new Date(evt.endDateTime)
-        : new Date(evt.dateTime);
+  // remove any options except the "all" one
+  select.querySelectorAll("option:not([value='all'])").forEach(o => o.remove());
 
-      // normalised matching values
-      const cityNorm = evt.city ? evt.city.trim().toLowerCase() : "";
-      const styleNorm = evt.style ? String(evt.style).trim().toLowerCase() : "";
-      const typeNorm = evt.type ? evt.type.trim().toLowerCase() : "";
+  metaData.cities.forEach(city => {
+    const opt = document.createElement("option");
+    opt.value = city.id;
+    opt.textContent = city.name;
+    select.appendChild(opt);
+  });
 
-      return {
-        ...evt,
-        startObj,
-        endObj,
-        _cityNorm: cityNorm,
-        _styleNorm: styleNorm,
-        _typeNorm: typeNorm
-      };
-    })
-    // keep events whose END is today or in future
-    .filter((evt) => evt.endObj >= today)
-    // filter by type
-    .filter((evt) => {
-      if (activeType === "all") return true;
-      return evt._typeNorm === activeType;
-    })
-    // filter by city
-    .filter((evt) => {
-      if (activeCity === "all") return true;
-      return evt._cityNorm === activeCity;
-    })
-    // filter by style
-    .filter((evt) => {
-      if (activeStyle === "all") return true;
-      return evt._styleNorm === activeStyle;
-    })
-    // sort by START
-    .sort((a, b) => a.startObj - b.startObj);
+  select.addEventListener("change", () => {
+    activeCityFilter = select.value || "all";
+    renderEvents();
+  });
+}
+
+function setupStyleFilter() {
+  const select = document.getElementById("styleFilter");
+  if (!select || !metaData?.styles) return;
+
+  select.querySelectorAll("option:not([value='all'])").forEach(o => o.remove());
+
+  metaData.styles.forEach(style => {
+    const opt = document.createElement("option");
+    opt.value = style.id;
+    opt.textContent = style.name;
+    select.appendChild(opt);
+  });
+
+  select.addEventListener("change", () => {
+    activeStyleFilter = select.value || "all";
+    renderEvents();
+  });
+}
+
+/* ---------- FILTER + RENDER ---------- */
+
+function applyFilters(events) {
+  return events.filter(evt => {
+    if (activeTypeFilter !== "all" && evt.type !== activeTypeFilter) {
+      return false;
+    }
+    if (activeCityFilter !== "all" && evt.city !== activeCityFilter) {
+      return false;
+    }
+    if (activeStyleFilter !== "all" && evt.style !== activeStyleFilter) {
+      return false;
+    }
+    return true;
+  });
 }
 
 function renderEvents() {
-  if (!Array.isArray(allEvents) || allEvents.length === 0) {
-    eventsContainer.innerHTML =
-      '<div class="no-events">No events found. Check back soon.</div>';
+  const container = document.getElementById("events-container");
+  if (!container) {
+    console.error('No #events-container found in DOM');
     return;
   }
 
-  const upcoming = buildUpcomingList();
+  const events = applyFilters(allEvents);
 
-  if (upcoming.length === 0) {
-    eventsContainer.innerHTML =
-      '<div class="no-events">No upcoming events that match these filters.</div>';
+  if (!events.length) {
+    container.innerHTML = "<p>No events match your filters.</p>";
     return;
   }
 
-  const cardsHtml =
-    '<div class="events-list">' +
-    upcoming
-      .map((evt) => {
-        const chipClass = evt.type || "other";
-        const chipLabel =
-          evt.type === "class"
-            ? "Class"
-            : evt.type === "social"
-            ? "Social"
-            : evt.type === "special"
-            ? "Workshop / Special"
-            : "Event";
+  container.innerHTML = "";
 
-        const imageBlock = evt.imageUrl
-          ? '<div class="event-image-wrapper">' +
-            '<img src="' +
-            evt.imageUrl +
-            '" alt="' +
-            evt.title +
-            ' poster" class="event-image" loading="lazy" />' +
-            "</div>"
-          : "";
+  events.forEach(evt => {
+    const city  = getCity(evt.city);
+    const style = getStyle(evt.style);
+    const type  = getType(evt.type);
+    const venue = getVenue(evt.venue);
 
-        const linkBlock = evt.link
-          ? '<div class="event-link"><a href="' +
-            evt.link +
-            '" target="_blank" rel="noopener noreferrer">More info / RSVP →</a></div>'
-          : "";
+    const when = formatEventTime(evt.dateTime, evt.endDateTime);
 
-        const metaBits = [];
-        if (evt.city) metaBits.push(evt.city);
-        if (evt.style) metaBits.push(capitalise(evt.style));
-        const metaBlock = metaBits.length
-          ? '<div class="event-meta">' + metaBits.join(" · ") + "</div>"
-          : "";
+    const styleLabel = style?.name || evt.style || "";
+    const typeLabel  = type?.label || evt.type || "";
+    const cityLabel  = city?.name || evt.city || "";
+    const venueName  = venue?.name || evt.location || "";
+    const venueAddr  = venue?.address || "";
 
-        return (
-          '<article class="event-card">' +
-          '<div class="event-header">' +
-          '<div class="event-title">' +
-          evt.title +
-          "</div>" +
-          '<div class="event-chip ' +
-          chipClass +
-          '">' +
-          chipLabel +
-          "</div>" +
-          "</div>" +
-          imageBlock +
-          metaBlock +
-          '<div class="event-date-time">' +
-          formatEventDate(evt.startObj, evt.endObj) +
-          "</div>" +
-          '<div class="event-location">' +
-          evt.location +
-          "</div>" +
-          linkBlock +
-          "</article>"
-        );
-      })
-      .join("") +
-    "</div>";
+    const styleEmoji = style?.emoji || "";
+    const typeEmoji  = type?.emoji || "";
 
-  eventsContainer.innerHTML = cardsHtml;
+    const card = document.createElement("article");
+    card.className = "event-card";
+
+    card.innerHTML = `
+      <div class="event-image-wrapper">
+        ${evt.imageUrl ? `<img src="${evt.imageUrl}" alt="${evt.title}" class="event-image" />` : ""}
+      </div>
+
+      <div class="event-content">
+        <h2 class="event-title">${evt.title}</h2>
+
+        <div class="event-datetime">${when}</div>
+
+        <div class="event-tags">
+          ${
+            styleLabel
+              ? `<span class="event-tag style-tag">${styleEmoji ? styleEmoji + " " : ""}${styleLabel}</span>`
+              : ""
+          }
+          ${
+            typeLabel
+              ? `<span class="event-tag type-tag">${typeEmoji ? typeEmoji + " " : ""}${typeLabel}</span>`
+              : ""
+          }
+        </div>
+
+        <div class="event-location">
+          <span class="event-venue">${venueName}</span>
+          ${
+            venueAddr
+              ? `<span class="event-address">${venueAddr}</span>`
+              : ""
+          }
+          ${
+            cityLabel
+              ? `<span class="event-city">${cityLabel}</span>`
+              : ""
+          }
+        </div>
+
+        ${
+          evt.link
+            ? `<a href="${evt.link}" target="_blank" rel="noopener" class="event-link">More info</a>`
+            : ""
+        }
+      </div>
+    `;
+
+    container.appendChild(card);
+  });
 }
 
-function setupFilterDropdowns() {
-  if (!Array.isArray(allEvents) || allEvents.length === 0) return;
+/* ---------- DATE FORMAT ---------- */
 
-  const cities = new Set();
-  const styles = new Set();
+function formatEventTime(startIso, endIso) {
+  if (!startIso) return "";
 
-  allEvents.forEach((evt) => {
-    if (evt.city) cities.add(evt.city.trim());
-    if (evt.style) styles.add(capitalise(String(evt.style).trim()));
+  const start = new Date(startIso);
+  const end = endIso ? new Date(endIso) : null;
+
+  const startStr = start.toLocaleString("en-NZ", {
+    weekday: "short",
+    day: "numeric",
+    month: "short",
+    hour: "2-digit",
+    minute: "2-digit"
   });
 
-  const sortedCities = Array.from(cities).sort((a, b) =>
-    a.localeCompare(b, undefined, { sensitivity: "base" })
-  );
-  const sortedStyles = Array.from(styles).sort((a, b) =>
-    a.localeCompare(b, undefined, { sensitivity: "base" })
-  );
+  if (!end) return startStr;
 
-  populateDropdown(cityFilter, sortedCities, "All cities");
-  populateDropdown(styleFilter, sortedStyles, "All styles");
+  // same day? just show time range
+  const sameDay =
+    start.getFullYear() === end.getFullYear() &&
+    start.getMonth() === end.getMonth() &&
+    start.getDate() === end.getDate();
 
-  activeCity = "all";
-  activeStyle = "all";
-}
+  const endTimeStr = end.toLocaleTimeString("en-NZ", {
+    hour: "2-digit",
+    minute: "2-digit"
+  });
 
-async function loadEvents() {
-  try {
-    const res = await fetch("events.json", { cache: "no-store" });
-    if (!res.ok) {
-      throw new Error("HTTP " + res.status);
-    }
-    const data = await res.json();
-    allEvents = Array.isArray(data) ? data : [];
-    setupFilterDropdowns();
-    renderEvents();
-  } catch (err) {
-    console.error("Failed to load events.json", err);
-    eventsContainer.innerHTML =
-      '<div class="no-events">Error loading events. Check back later.</div>';
+  if (sameDay) {
+    return `${startStr} – ${endTimeStr}`;
   }
-}
 
-// Wire up type filter buttons
-filterButtons.forEach((btn) => {
-  btn.addEventListener("click", () => {
-    filterButtons.forEach((b) => b.classList.remove("active"));
-    btn.classList.add("active");
-    activeType = (btn.dataset.type || "all").toLowerCase();
-    renderEvents();
+  const endStr = end.toLocaleString("en-NZ", {
+    weekday: "short",
+    day: "numeric",
+    month: "short",
+    hour: "2-digit",
+    minute: "2-digit"
   });
-});
 
-// Wire up city/style dropdowns
-if (cityFilter) {
-  cityFilter.addEventListener("change", (e) => {
-    const val = e.target.value || "all";
-    activeCity = val === "all" ? "all" : val.toLowerCase();
-    renderEvents();
-  });
+  return `${startStr} → ${endStr}`;
 }
-
-if (styleFilter) {
-  styleFilter.addEventListener("change", (e) => {
-    const val = e.target.value || "all";
-    activeStyle = val === "all" ? "all" : val.toLowerCase();
-    renderEvents();
-  });
-}
-
-// Initial load
-loadEvents();
