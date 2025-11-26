@@ -21,6 +21,39 @@
       "endDateTime": "2025-11-24T07:00:00",
       "link": "https://www.instagram.com/queenstownsalsa/",
       "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR9mwl8r_ngEGrx7dSQu9ZMKgcKQHc5uE-IVw&s"
-    }
+    },
+    {
+    "title": "Cuban Salsa - Beginners",
+    "city": "queenstown",
+    "style": "salsa",
+    "type": "class",
+    "venue": "te-atamira",
+    "dateTime": "2025-12-01T19:00:00+13:00",
+    "endDateTime": "2025-12-01T20:00:00+13:00",
+    "link": "https://example.com/cuban-beginners",
+    "imageUrl": "img/cuban-beginners.png"
+  },
+  {
+    "title": "Cuban Salsa - Beginners",
+    "city": "queenstown",
+    "style": "salsa",
+    "type": "class",
+    "venue": "te-atamira",
+    "dateTime": "2025-12-08T19:00:00+13:00",
+    "endDateTime": "2025-12-08T20:00:00+13:00",
+    "link": "https://example.com/cuban-beginners",
+    "imageUrl": "img/cuban-beginners.png"
+  },
+  {
+    "title": "Cuban Salsa - Beginners",
+    "city": "queenstown",
+    "style": "salsa",
+    "type": "class",
+    "venue": "te-atamira",
+    "dateTime": "2025-12-15T19:00:00+13:00",
+    "endDateTime": "2025-12-15T20:00:00+13:00",
+    "link": "https://example.com/cuban-beginners",
+    "imageUrl": "img/cuban-beginners.png"
+  }
   ]
 }
