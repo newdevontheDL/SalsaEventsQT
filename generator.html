@@ -102,8 +102,9 @@
   <div class="wrapper">
     <h1>Salsa Events JSON Generator</h1>
     <p class="hint">
-      Fill in up to 4 weekly classes. Use the date/time pickers. Click <strong>Generate JSON</strong>, then paste the output into <code>events.json</code>.
-      Each generated event has <code>dateTime</code> (start), <code>endDateTime</code> (end), <code>city</code> and <code>style</code>.
+      Fill in up to 4 weekly classes. Uses <code>meta.json</code> for cities, styles, types and venues.
+      Click <strong>Generate JSON</strong>, then paste the output into <code>events.json</code>.
+      Times are saved as NZ local with the correct offset (<code>+12:00</code> / <code>+13:00</code>).
     </p>
 
     <div class="grid">
@@ -118,14 +119,27 @@
           Title
           <input id="c1_title" value="Cuban Salsa - Beginners">
         </label>
+
         <label>
           City
-          <input id="c1_city" value="Queenstown">
+          <select id="c1_city" class="city-select"></select>
         </label>
+
         <label>
           Style
           <select id="c1_style" class="style-select"></select>
         </label>
+
+        <label>
+          Type
+          <select id="c1_type" class="type-select"></select>
+        </label>
+
+        <label>
+          Venue
+          <select id="c1_venue" class="venue-select"></select>
+        </label>
+
         <label>
           Weekday
           <select id="c1_weekday">
@@ -155,18 +169,6 @@
           <input type="date" id="c1_end" value="2026-03-31">
         </label>
         <label>
-          Location
-          <input id="c1_location" value="Te Atamira, Remarkables Park, Frankton">
-        </label>
-        <label>
-          Type
-          <select id="c1_type">
-            <option value="class" selected>class</option>
-            <option value="social">social</option>
-            <option value="special">special</option>
-          </select>
-        </label>
-        <label>
           Link (optional)
           <input id="c1_link" value="https://example.com/cuban-beginners">
         </label>
@@ -187,14 +189,27 @@
           Title
           <input id="c2_title" value="Cuban Salsa - Improvers">
         </label>
+
         <label>
           City
-          <input id="c2_city" value="Queenstown">
+          <select id="c2_city" class="city-select"></select>
         </label>
+
         <label>
           Style
           <select id="c2_style" class="style-select"></select>
         </label>
+
+        <label>
+          Type
+          <select id="c2_type" class="type-select"></select>
+        </label>
+
+        <label>
+          Venue
+          <select id="c2_venue" class="venue-select"></select>
+        </label>
+
         <label>
           Weekday
           <select id="c2_weekday">
@@ -224,18 +239,6 @@
           <input type="date" id="c2_end" value="2026-03-31">
         </label>
         <label>
-          Location
-          <input id="c2_location" value="Te Atamira, Remarkables Park, Frankton">
-        </label>
-        <label>
-          Type
-          <select id="c2_type">
-            <option value="class" selected>class</option>
-            <option value="social">social</option>
-            <option value="special">special</option>
-          </select>
-        </label>
-        <label>
           Link (optional)
           <input id="c2_link" value="https://example.com/cuban-improvers">
         </label>
@@ -256,14 +259,27 @@
           Title
           <input id="c3_title" value="Bachata - Beginners">
         </label>
+
         <label>
           City
-          <input id="c3_city" value="Queenstown">
+          <select id="c3_city" class="city-select"></select>
         </label>
+
         <label>
           Style
           <select id="c3_style" class="style-select"></select>
         </label>
+
+        <label>
+          Type
+          <select id="c3_type" class="type-select"></select>
+        </label>
+
+        <label>
+          Venue
+          <select id="c3_venue" class="venue-select"></select>
+        </label>
+
         <label>
           Weekday
           <select id="c3_weekday">
@@ -293,18 +309,6 @@
           <input type="date" id="c3_end" value="2026-04-02">
         </label>
         <label>
-          Location
-          <input id="c3_location" value="Te Atamira, Remarkables Park, Frankton">
-        </label>
-        <label>
-          Type
-          <select id="c3_type">
-            <option value="class" selected>class</option>
-            <option value="social">social</option>
-            <option value="special">special</option>
-          </select>
-        </label>
-        <label>
           Link (optional)
           <input id="c3_link" value="https://example.com/bachata-beginners">
         </label>
@@ -325,14 +329,27 @@
           Title
           <input id="c4_title" value="Bachata - Open Level">
         </label>
+
         <label>
           City
-          <input id="c4_city" value="Queenstown">
+          <select id="c4_city" class="city-select"></select>
         </label>
+
         <label>
           Style
           <select id="c4_style" class="style-select"></select>
         </label>
+
+        <label>
+          Type
+          <select id="c4_type" class="type-select"></select>
+        </label>
+
+        <label>
+          Venue
+          <select id="c4_venue" class="venue-select"></select>
+        </label>
+
         <label>
           Weekday
           <select id="c4_weekday">
@@ -362,18 +379,6 @@
           <input type="date" id="c4_end" value="2026-04-02">
         </label>
         <label>
-          Location
-          <input id="c4_location" value="Te Atamira, Remarkables Park, Frankton">
-        </label>
-        <label>
-          Type
-          <select id="c4_type">
-            <option value="class" selected>class</option>
-            <option value="social">social</option>
-            <option value="special">special</option>
-          </select>
-        </label>
-        <label>
           Link (optional)
           <input id="c4_link" value="https://example.com/bachata-open">
         </label>
@@ -388,11 +393,11 @@
       <h2>One-off Events (optional)</h2>
       <p class="hint">
         Enter extra events as valid JSON array items (no surrounding <code>[ ]</code>).<br>
-        They can include <code>endDateTime</code>, <code>city</code> and <code>style</code> if you want, e.g.:<br>
-        <code>{ "title": "Ritmo", "dateTime": "2026-02-13T18:30:00", "endDateTime": "2026-02-15T23:59:00", "city": "Queenstown", "style": "salsa", ... }</code>
+        They should use IDs for <code>city</code>, <code>style</code>, <code>type</code>, <code>venue</code>, e.g.:<br>
+        <code>{ "title": "Ritmo Queenstown", "dateTime": "2026-02-13T18:30:00+13:00", "endDateTime": "2026-02-13T21:00:00+13:00", "city": "queenstown", "style": "salsa", "type": "special", "venue": "te-atamira", ... }</code>
       </p>
       <textarea id="oneOffInput" placeholder='Example:
-{ "title": "Ritmo Queenstown", "dateTime": "2026-02-13T18:30:00", "endDateTime": "2026-02-15T23:59:00", "city": "Queenstown", "location": "Te Atamira, Remarkables Park, Frankton", "type": "special", "style": "salsa", "link": "https://events.humanitix.com/ritmo-queenstown", "imageUrl": "https://..." }'></textarea>
+{ "title": "Ritmo Queenstown", "dateTime": "2026-02-13T18:30:00+13:00", "endDateTime": "2026-02-13T21:00:00+13:00", "city": "queenstown", "style": "salsa", "type": "special", "venue": "te-atamira", "link": "https://events.humanitix.com/ritmo-queenstown", "imageUrl": "https://..." }'></textarea>
     </div>
 
     <div class="error" id="errorBox" style="display:none;"></div>
@@ -405,27 +410,124 @@
   </div>
 
   <script>
-    // Load dance styles from styles.json and populate all .style-select dropdowns
-    async function loadStyles() {
-      try {
-        const res = await fetch("styles.json?cache=" + Date.now());
-        if (!res.ok) throw new Error("HTTP " + res.status);
-        const styles = await res.json();
+    let metaData = null;
 
-        const selects = document.querySelectorAll(".style-select");
-        selects.forEach(sel => {
-          sel.innerHTML = "";
-          styles.forEach(style => {
-            const opt = document.createElement("option");
-            const value = String(style).toLowerCase();
-            opt.value = value;
-            opt.textContent = style.charAt(0).toUpperCase() + style.slice(1);
-            sel.appendChild(opt);
-          });
-        });
+    // --- NZ local datetime -> ISO string with correct offset (+12 / +13) ---
+    function toLocalIsoWithOffset(dateObj) {
+      const pad = n => String(n).padStart(2, "0");
+
+      const year   = dateObj.getFullYear();
+      const month  = pad(dateObj.getMonth() + 1);
+      const day    = pad(dateObj.getDate());
+      const hour   = pad(dateObj.getHours());
+      const minute = pad(dateObj.getMinutes());
+      const second = pad(dateObj.getSeconds());
+
+      // JS: getTimezoneOffset is minutes behind UTC (negative for positive TZ)
+      const offsetMinutes = -dateObj.getTimezoneOffset();
+      const sign = offsetMinutes >= 0 ? "+" : "-";
+      const abs  = Math.abs(offsetMinutes);
+      const offH = pad(Math.floor(abs / 60));
+      const offM = pad(abs % 60);
+
+      return `${year}-${month}-${day}T${hour}:${minute}:${second}${sign}${offH}:${offM}`;
+    }
+
+    // --- Load meta.json, populate city / style / type / venue selects ---
+    async function loadMeta() {
+      try {
+        const res = await fetch("meta.json?cache=" + Date.now());
+        if (!res.ok) throw new Error("HTTP " + res.status);
+        metaData = await res.json();
+
+        populateCitySelects(metaData.cities || []);
+        populateStyleSelects(metaData.styles || []);
+        populateTypeSelects(metaData.types || []);
+        populateVenueSelects(metaData.venues || []);
+
+        // Set some sensible defaults if these IDs exist
+        setDefaultValue("c1_city", "queenstown");
+        setDefaultValue("c2_city", "queenstown");
+        setDefaultValue("c3_city", "queenstown");
+        setDefaultValue("c4_city", "queenstown");
+
+        setDefaultValue("c1_style", "salsa");
+        setDefaultValue("c2_style", "salsa");
+        setDefaultValue("c3_style", "bachata");
+        setDefaultValue("c4_style", "bachata");
+
+        setDefaultValue("c1_type", "class");
+        setDefaultValue("c2_type", "class");
+        setDefaultValue("c3_type", "class");
+        setDefaultValue("c4_type", "class");
+
+        setDefaultValue("c1_venue", "te-atamira");
+        setDefaultValue("c2_venue", "te-atamira");
+        setDefaultValue("c3_venue", "te-atamira");
+        setDefaultValue("c4_venue", "te-atamira");
       } catch (err) {
-        console.error("Failed to load styles.json:", err);
+        console.error("Failed to load meta.json:", err);
       }
+    }
+
+    function setDefaultValue(id, value) {
+      const el = document.getElementById(id);
+      if (!el) return;
+      if ([...el.options].some(o => o.value === value)) {
+        el.value = value;
+      }
+    }
+
+    function populateCitySelects(cities) {
+      const selects = document.querySelectorAll(".city-select");
+      selects.forEach(sel => {
+        sel.innerHTML = "";
+        cities.forEach(city => {
+          const opt = document.createElement("option");
+          opt.value = city.id;
+          opt.textContent = city.name;
+          sel.appendChild(opt);
+        });
+      });
+    }
+
+    function populateStyleSelects(styles) {
+      const selects = document.querySelectorAll(".style-select");
+      selects.forEach(sel => {
+        sel.innerHTML = "";
+        styles.forEach(style => {
+          const opt = document.createElement("option");
+          opt.value = style.id;
+          opt.textContent = style.name;
+          sel.appendChild(opt);
+        });
+      });
+    }
+
+    function populateTypeSelects(types) {
+      const selects = document.querySelectorAll(".type-select");
+      selects.forEach(sel => {
+        sel.innerHTML = "";
+        types.forEach(t => {
+          const opt = document.createElement("option");
+          opt.value = t.id;
+          opt.textContent = t.label;
+          sel.appendChild(opt);
+        });
+      });
+    }
+
+    function populateVenueSelects(venues) {
+      const selects = document.querySelectorAll(".venue-select");
+      selects.forEach(sel => {
+        sel.innerHTML = "";
+        venues.forEach(v => {
+          const opt = document.createElement("option");
+          opt.value = v.id;
+          opt.textContent = v.name;
+          sel.appendChild(opt);
+        });
+      });
     }
 
     function parseDateParts(isoDate) {
@@ -440,7 +542,7 @@
 
     function parseTimeParts(timeStr, label) {
       const parts = timeStr.split(":");
-      if (parts.length !== 2) {
+      if (parts.length < 2) {
         throw new Error("Invalid " + label + " time: " + timeStr);
       }
       const hour = Number(parts[0]);
@@ -456,13 +558,13 @@
         title,
         city,
         style,
+        type,
+        venue,
         weekday,
         startTime,
         endTime,
         startDate,
         endDate,
-        location,
-        type,
         link,
         imageUrl
       } = pattern;
@@ -494,17 +596,17 @@
         const endDateObj = new Date(current.getTime());
         endDateObj.setHours(endTimeParts.hour, endTimeParts.minute, 0, 0);
 
-        const isoStart = startDateObj.toISOString();
-        const isoEnd = endDateObj.toISOString();
+        const isoStart = toLocalIsoWithOffset(startDateObj);
+        const isoEnd   = toLocalIsoWithOffset(endDateObj);
 
         events.push({
           title,
           city,
           style,
+          type,
+          venue,
           dateTime: isoStart,
           endDateTime: isoEnd,
-          location,
-          type,
           link,
           imageUrl
         });
@@ -522,13 +624,13 @@
       const title = document.getElementById(prefix + "_title").value.trim();
       const city = document.getElementById(prefix + "_city").value.trim();
       const style = document.getElementById(prefix + "_style").value.trim();
+      const type = document.getElementById(prefix + "_type").value.trim();
+      const venue = document.getElementById(prefix + "_venue").value.trim();
       const weekday = Number(document.getElementById(prefix + "_weekday").value);
       const startTime = document.getElementById(prefix + "_time_start").value.trim();
       const endTime = document.getElementById(prefix + "_time_end").value.trim();
       const startDate = document.getElementById(prefix + "_start").value.trim();
       const endDate = document.getElementById(prefix + "_end").value.trim();
-      const location = document.getElementById(prefix + "_location").value.trim();
-      const type = document.getElementById(prefix + "_type").value.trim();
       const link = document.getElementById(prefix + "_link").value.trim();
       const imageUrl = document.getElementById(prefix + "_image").value.trim();
 
@@ -540,13 +642,13 @@
         title,
         city,
         style,
+        type,
+        venue,
         weekday,
         startTime,
         endTime,
         startDate,
         endDate,
-        location,
-        type,
         link,
         imageUrl
       };
@@ -598,8 +700,8 @@
       }
     });
 
-    // Kick off style loading once DOM is ready enough
-    loadStyles();
+    // Init
+    loadMeta();
   </script>
 </body>
 </html>
