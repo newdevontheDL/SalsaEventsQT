@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Reindeer Missions</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    :root {
+      --bg: #0b1020;
+      --card: #171c30;
+      --accent: #f5c35b;
+      --accent-soft: #f5c35b22;
+      --text: #f5f5f5;
+      --muted: #aaaaaa;
+      --danger: #ff6b6b;
+    }
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top, #1f2740 0, #050814 45%, #02030a 100%);
+      color: var(--text);
+      display: flex;
+      align-items: stretch;
+      justify-content: center;
+      padding: 16px;
+    }
+    .app {
+      width: 100%;
+      max-width: 900px;
+      margin: auto;
+    }
+    .card {
+      background: linear-gradient(145deg, #181d33, #111629);
+      border-radius: 18px;
+      padding: 20px 18px 22px;
+      box-shadow:
+        0 18px 40px rgba(0, 0, 0, 0.6),
+        0 0 0 1px rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(245, 195, 91, 0.12);
+    }
+    h1 {
+      margin: 0 0 4px;
+      font-size: 1.6rem;
+      letter-spacing: 0.03em;
+    }
+    .subtitle {
+      margin: 0 0 16px;
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
+    .selector-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 10px;
+    }
+    .reindeer-btn {
+      border-radius: 999px;
+      padding: 10px 12px;
+      border: 1px solid rgba(245, 195, 91, 0.2);
+      background: radial-gradient(circle at top left, #252b44, #13182a 55%, #0a0e1c);
+      color: var(--text);
+      font-size: 0.9rem;
+      font-weight: 500;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 3px;
+      cursor: pointer;
+      outline: none;
+      transition:
+        transform
