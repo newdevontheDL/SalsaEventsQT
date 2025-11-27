@@ -19,7 +19,7 @@
     }
     body {
       margin: 0;
-      min-height: vh;
+      min-height: 100vh;
       font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       background: radial-gradient(circle at top, #1f2740 0, #050814 45%, #02030a 100%);
       color: var(--text);
@@ -117,8 +117,8 @@
       font-size: 1.25rem;
     }
     .missions p {
-      margin: 0 10px;
-      font-size: px;
+      margin: 0 0 10px;
+      font-size: 0.85rem;
       color: var(--muted);
     }
     .mission-list {
@@ -140,6 +140,21 @@
       color: var(--accent);
       font-weight: 600;
     }
+
+    .mission-check {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      cursor: pointer;
+    }
+    .mission-check input[type="checkbox"] {
+      margin-top: 3px;
+      accent-color: var(--accent);
+    }
+    .mission-text {
+      flex: 1;
+    }
+
     .footnote {
       font-size: 0.75rem;
       color: var(--muted);
@@ -226,7 +241,7 @@
       <div id="selector-view">
         <h1>Reindeer Missions</h1>
         <p class="subtitle">
-          Firstly Remember which reindeer you selected, pick your reindeer from the list below, then go complete your missions to be in for a chance to win a prize!
+          Scan the QR, pick your reindeer, then go find people from the other herds and ask them your questions.
         </p>
 
         <div class="badge">
@@ -267,7 +282,7 @@
           <!-- Initial mission (same for everyone) -->
           <div class="mission-item" style="margin-bottom:12px;">
             <strong>Initial Mission:</strong>
-            <span>Find all the other reindeers in your group and take a group selfie.</span>
+            <span> Find all the other reindeers in your group and take a group selfie.</span>
           </div>
 
           <ul class="mission-list" id="mission-list"></ul>
@@ -552,9 +567,22 @@
       data.missions.forEach(m => {
         const li = document.createElement("li");
         li.className = "mission-item";
-        li.innerHTML =
+
+        const label = document.createElement("label");
+        label.className = "mission-check";
+
+        const checkbox = document.createElement("input");
+        checkbox.type = "checkbox";
+
+        const span = document.createElement("span");
+        span.className = "mission-text";
+        span.innerHTML =
           "<strong>Find a " + m.target + ":</strong> " +
           "<span> " + m.question + "</span>";
+
+        label.appendChild(checkbox);
+        label.appendChild(span);
+        li.appendChild(label);
         missionList.appendChild(li);
       });
 
