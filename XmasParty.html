@@ -19,7 +19,7 @@
     }
     body {
       margin: 0;
-      min-height: 100vh;
+      min-height: vh;
       font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       background: radial-gradient(circle at top, #1f2740 0, #050814 45%, #02030a 100%);
       color: var(--text);
@@ -117,8 +117,8 @@
       font-size: 1.25rem;
     }
     .missions p {
-      margin: 0 0 10px;
-      font-size: 0.85rem;
+      margin: 0 10px;
+      font-size: px;
       color: var(--muted);
     }
     .mission-list {
@@ -176,6 +176,36 @@
     .hidden {
       display: none;
     }
+
+    .hidden-mission-box {
+      margin-top: 12px;
+      padding: 10px 12px;
+      background: rgba(245, 195, 91, 0.12);
+      border: 1px solid rgba(245, 195, 91, 0.35);
+      border-radius: 12px;
+      display: none;
+      color: var(--text);
+      font-size: 0.9rem;
+    }
+
+    .hidden-mission-btn {
+      margin-top: 12px;
+      width: 100%;
+      border-radius: 999px;
+      padding: 10px 12px;
+      background: rgba(245, 195, 91, 0.15);
+      border: 1px solid rgba(245, 195, 91, 0.4);
+      color: var(--accent);
+      cursor: pointer;
+      font-size: 0.9rem;
+      transition: background 0.15s ease, border-color 0.15s ease;
+    }
+
+    .hidden-mission-btn:hover {
+      background: rgba(245, 195, 91, 0.25);
+      border-color: var(--accent);
+    }
+
     @media (max-width: 480px) {
       .card {
         padding: 16px 14px 18px;
@@ -195,7 +225,9 @@
       <!-- Selector view -->
       <div id="selector-view">
         <h1>Reindeer Missions</h1>
-        <p class="subtitle">Scan the QR, pick your reindeer, then go find people from the other herds and ask them your questions.</p>
+        <p class="subtitle">
+          Scan the QR, pick your reindeer, then go find people from the other herds and ask them your questions.
+        </p>
 
         <div class="badge">
           <span class="dot"></span>
@@ -207,7 +239,7 @@
         </div>
 
         <p class="footnote" style="margin-top: 12px;">
-          Tip: Once you’ve asked all four questions, you can swap phones with someone else and compare answers.
+          Initial mission for everyone: once you know your reindeer, find the other people in your herd and take a group selfie.
         </p>
       </div>
 
@@ -229,17 +261,28 @@
         </div>
 
         <div class="missions">
-  <h2 id="missions-heading"></h2>
-  <p class="subtitle" id="missions-note"></p>
+          <h2 id="missions-heading"></h2>
+          <p class="subtitle" id="missions-note"></p>
 
-  <!-- NEW INITIAL MISSION SECTION -->
-  <div class="mission-item" style="margin-bottom:12px;">
-    <strong>Initial Mission:</strong>
-    <span>Find all the other reindeers in your group and take a group selfie.</span>
-  </div>
-  <!-- END NEW SECTION -->
+          <!-- Initial mission (same for everyone) -->
+          <div class="mission-item" style="margin-bottom:12px;">
+            <strong>Initial Mission:</strong>
+            <span>Find all the other reindeers in your group and take a group selfie.</span>
+          </div>
 
-  <ul class="mission-list" id="mission-list"></ul>
+          <ul class="mission-list" id="mission-list"></ul>
+
+          <!-- Hidden Mission Button -->
+          <button type="button" class="hidden-mission-btn" id="hidden-mission-btn">
+            Reveal Hidden Mission 🎁
+          </button>
+
+          <!-- Hidden Mission Box -->
+          <div class="hidden-mission-box" id="hidden-mission-box">
+            <strong>Hidden Mission:</strong><br>
+            Find the one and only <strong>Dasher</strong> and take a photo with them.
+          </div>
+
           <p class="footnote">
             You don’t need proof, just good chat. Extra points if you talk to someone you don’t normally work with.
           </p>
@@ -252,7 +295,7 @@
     const REINDEER_DATA = {
       "Comet": {
         traits: "Strong · reliable · cool",
-        missionsNote: "Find one of each of these reindeer and ask them your question.",
+        missionsNote: "Find one of each of these reindeer types somewhere in the room.",
         missions: [
           {
             target: "Vixen",
@@ -459,6 +502,8 @@
     const missionsNote = document.getElementById("missions-note");
     const missionList = document.getElementById("mission-list");
     const backBtn = document.getElementById("back-btn");
+    const hiddenBtn = document.getElementById("hidden-mission-btn");
+    const hiddenBox = document.getElementById("hidden-mission-box");
 
     const order = [
       "Comet",
@@ -509,9 +554,13 @@
         li.className = "mission-item";
         li.innerHTML =
           "<strong>Find a " + m.target + ":</strong> " +
-          "<span>" + m.question + "</span>";
+          "<span> " + m.question + "</span>";
         missionList.appendChild(li);
       });
+
+      // Reset hidden mission state each time
+      hiddenBox.style.display = "none";
+      hiddenBtn.textContent = "Reveal Hidden Mission 🎁";
 
       selectorView.classList.add("hidden");
       missionsView.classList.remove("hidden");
@@ -523,9 +572,24 @@
       missionsView.classList.add("hidden");
       selectorView.classList.remove("hidden");
       window.history.replaceState({}, "", window.location.pathname);
+
+      // Reset hidden mission state on back too
+      hiddenBox.style.display = "none";
+      hiddenBtn.textContent = "Reveal Hidden Mission 🎁";
     }
 
     backBtn.addEventListener("click", goBack);
+
+    // Hidden Mission toggle
+    hiddenBtn.addEventListener("click", () => {
+      if (hiddenBox.style.display === "none" || hiddenBox.style.display === "") {
+        hiddenBox.style.display = "block";
+        hiddenBtn.textContent = "Hide Hidden Mission 🎁";
+      } else {
+        hiddenBox.style.display = "none";
+        hiddenBtn.textContent = "Reveal Hidden Mission 🎁";
+      }
+    });
 
     createButtons();
 
