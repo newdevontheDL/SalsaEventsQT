@@ -12,6 +12,7 @@
     { "id": "kizomba", "name": "Kizomba", "emoji": "🔥" },
     { "id": "tango", "name": "Tango", "emoji": "❤️" },
     { "id": "forro", "name": "Forró", "emoji": "🎶" }
+    { "id": "hiphop", "name": "Hip-Hop", "emoji": "" }
   ],
 
   "types": [
