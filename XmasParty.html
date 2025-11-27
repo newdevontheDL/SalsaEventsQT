@@ -215,13 +215,17 @@
       font-size: 0.9rem;
       transition: background 0.15s ease, border-color 0.15s ease;
     }
-
     .hidden-mission-btn:hover {
       background: rgba(245, 195, 91, 0.25);
       border-color: var(--accent);
     }
 
     .hidden-mission-check.completed .mission-text {
+      text-decoration: line-through;
+      opacity: 0.55;
+    }
+
+    .initial-mission-check.completed .mission-text {
       text-decoration: line-through;
       opacity: 0.55;
     }
@@ -286,8 +290,13 @@
 
           <!-- Initial mission (same for everyone) -->
           <div class="mission-item" style="margin-bottom:12px;">
-            <strong>Initial Mission:</strong>
-            <span> Find all the other reindeers in your group and take a group selfie.</span>
+            <label class="mission-check initial-mission-check">
+              <input type="checkbox" id="initial-mission-checkbox">
+              <span class="mission-text">
+                <strong>Initial Mission:</strong>
+                <span> Find all the other reindeers in your group and take a group selfie.</span>
+              </span>
+            </label>
           </div>
 
           <ul class="mission-list" id="mission-list"></ul>
@@ -531,6 +540,8 @@
     const hiddenBox = document.getElementById("hidden-mission-box");
     const hiddenCheckbox = document.getElementById("hidden-mission-checkbox");
     const hiddenMissionCheck = document.querySelector(".hidden-mission-check");
+    const initialCheckbox = document.getElementById("initial-mission-checkbox");
+    const initialMissionCheck = document.querySelector(".initial-mission-check");
 
     const order = [
       "Comet",
@@ -602,6 +613,10 @@
         missionList.appendChild(li);
       });
 
+      // Reset initial mission state
+      initialCheckbox.checked = false;
+      initialMissionCheck.classList.remove("completed");
+
       // Reset hidden mission state each time
       hiddenBox.style.display = "none";
       hiddenBtn.textContent = "Reveal Hidden Mission 🎁";
@@ -618,6 +633,10 @@
       missionsView.classList.add("hidden");
       selectorView.classList.remove("hidden");
       window.history.replaceState({}, "", window.location.pathname);
+
+      // Reset initial mission state
+      initialCheckbox.checked = false;
+      initialMissionCheck.classList.remove("completed");
 
       // Reset hidden mission state on back too
       hiddenBox.style.display = "none";
@@ -642,6 +661,11 @@
     // Hidden mission checkbox strike-through
     hiddenCheckbox.addEventListener("change", () => {
       hiddenMissionCheck.classList.toggle("completed", hiddenCheckbox.checked);
+    });
+
+    // Initial mission checkbox strike-through
+    initialCheckbox.addEventListener("change", () => {
+      initialMissionCheck.classList.toggle("completed", initialCheckbox.checked);
     });
 
     createButtons();
