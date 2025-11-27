@@ -565,29 +565,30 @@
     ];
 
     function createButtons() {
-      order.forEach(name => {
-        const data = REINDEER_DATA[name];
-        const btn = document.createElement("button");
-        btn.type = "button";
-        btn.className = "reindeer-btn";
-        btn.dataset.reindeer = name;
+  selectorGrid.innerHTML = "";
 
-        const line1 = document.createElement("span");
-        line1.className = "name";
-        line1.textContent = name;
+  order.forEach(name => {
+    const data = REINDEER_DATA[name];
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "reindeer-btn";
+    btn.dataset.reindeer = name;
 
-        const line2 = document.createElement("span");
-        line2.className = "trait";
-        line2.textContent = data.traits;
+    const line1 = document.createElement("span");
+    line1.className = "name";
+    line1.textContent = name;
 
-        btn.appendChild(line1);
-        btn.appendChild(line2);
+    const line2 = document.createElement("span");
+    line2.className = "trait";
+    line2.textContent = `${data.traits} · ${data.count} in herd`;
 
-        btn.addEventListener("click", () => showMissions(name));
-        selectorGrid.appendChild(btn);
-      });
-    }
+    btn.appendChild(line1);
+    btn.appendChild(line2);
 
+    btn.addEventListener("click", () => showMissions(name));
+    selectorGrid.appendChild(btn);
+  });
+}
     function pluralise(name, n) {
       return n === 1 ? name : name + "s";
     }
