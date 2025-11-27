@@ -114,7 +114,7 @@
     }
     .missions h2 {
       margin: 0 0 6px;
-      font-size: 1.25rem;
+      font-size: 1.1rem;
     }
     .missions p {
       margin: 0 0 10px;
@@ -281,23 +281,27 @@
 
         <div class="badge">
           <span class="dot"></span>
-          <span>Find these four reindeer and ask them your questions</span>
+          <span>Group + individual missions</span>
         </div>
 
         <div class="missions">
-          <h2 id="missions-heading"></h2>
-          <p class="subtitle" id="missions-note"></p>
+          <!-- GROUP SECTION -->
+          <h2 id="group-heading">Group mission with your herd</h2>
+          <p class="subtitle" id="group-note"></p>
 
-          <!-- Initial mission (same for everyone) -->
           <div class="mission-item" style="margin-bottom:12px;">
             <label class="mission-check initial-mission-check">
               <input type="checkbox" id="initial-mission-checkbox">
               <span class="mission-text">
-                <strong>Initial Mission:</strong>
+                <strong>Group Mission:</strong>
                 <span> Find all the other reindeers in your group and take a group selfie.</span>
               </span>
             </label>
           </div>
+
+          <!-- INDIVIDUAL SECTION -->
+          <h2 style="margin-top: 10px;">Individual missions (do these on your own)</h2>
+          <p class="subtitle" id="missions-note"></p>
 
           <ul class="mission-list" id="mission-list"></ul>
 
@@ -332,22 +336,10 @@
         traits: "Strong · reliable · cool",
         missionsNote: "Find one of each of these reindeer types somewhere in the room.",
         missions: [
-          {
-            target: "Vixen",
-            question: "What’s the worst Christmas present you’ve ever received?"
-          },
-          {
-            target: "Donner",
-            question: "If you were an elf, what would your elf name be?"
-          },
-          {
-            target: "Cupid",
-            question: "What’s the best thing that’s happened to you this month?"
-          },
-          {
-            target: "Rudolph",
-            question: "What are you most looking forward to doing over the Christmas break?"
-          }
+          { target: "Vixen",  question: "What’s the worst Christmas present you’ve ever received?" },
+          { target: "Donner", question: "If you were an elf, what would your elf name be?" },
+          { target: "Cupid",  question: "What’s the best thing that’s happened to you this month?" },
+          { target: "Rudolph",question: "What are you most looking forward to doing over the Christmas break?" }
         ]
       },
       "Vixen": {
@@ -355,22 +347,10 @@
         traits: "Sassy · clever · mischievous",
         missionsNote: "Track down these four reindeer types somewhere in the room.",
         missions: [
-          {
-            target: "Comet",
-            question: "If you were an elf, what would your elf name be?"
-          },
-          {
-            target: "Donner",
-            question: "What’s your strangest family Christmas tradition?"
-          },
-          {
-            target: "Rudolph",
-            question: "What’s the best thing that’s happened to you this month?"
-          },
-          {
-            target: "Dancer",
-            question: "What are you most looking forward to doing over the Christmas break?"
-          }
+          { target: "Comet",  question: "If you were an elf, what would your elf name be?" },
+          { target: "Donner", question: "What’s your strangest family Christmas tradition?" },
+          { target: "Rudolph",question: "What’s the best thing that’s happened to you this month?" },
+          { target: "Dancer", question: "What are you most looking forward to doing over the Christmas break?" }
         ]
       },
       "Donner": {
@@ -378,22 +358,10 @@
         traits: "Loyal · bold · thunderous",
         missionsNote: "You’re the thunder – now go stir some conversations.",
         missions: [
-          {
-            target: "Vixen",
-            question: "What’s the worst Christmas present you’ve ever received?"
-          },
-          {
-            target: "Cupid",
-            question: "What’s the best thing that’s happened to you this month?"
-          },
-          {
-            target: "Rudolph",
-            question: "If you were an elf, what would your elf name be?"
-          },
-          {
-            target: "Comet",
-            question: "What are you most looking forward to doing over the Christmas break?"
-          }
+          { target: "Vixen",  question: "What’s the worst Christmas present you’ve ever received?" },
+          { target: "Cupid",  question: "What’s the best thing that’s happened to you this month?" },
+          { target: "Rudolph",question: "If you were an elf, what would your elf name be?" },
+          { target: "Comet",  question: "What are you most looking forward to doing over the Christmas break?" }
         ]
       },
       "Cupid": {
@@ -401,22 +369,10 @@
         traits: "Sweet · affectionate · joyful",
         missionsNote: "Spread chaos and wholesomeness in equal measure.",
         missions: [
-          {
-            target: "Comet",
-            question: "What’s your strangest family Christmas tradition?"
-          },
-          {
-            target: "Vixen",
-            question: "What’s the best thing that’s happened to you this month?"
-          },
-          {
-            target: "Donner",
-            question: "What’s the worst Christmas present you’ve ever received?"
-          },
-          {
-            target: "Rudolph",
-            question: "What are you most looking forward to doing over the Christmas break?"
-          }
+          { target: "Comet",  question: "What’s your strangest family Christmas tradition?" },
+          { target: "Vixen",  question: "What’s the best thing that’s happened to you this month?" },
+          { target: "Donner", question: "What’s the worst Christmas present you’ve ever received?" },
+          { target: "Rudolph",question: "What are you most looking forward to doing over the Christmas break?" }
         ]
       },
       "Rudolph": {
@@ -424,22 +380,10 @@
         traits: "Bright · brave · kind",
         missionsNote: "Lead with questions. Torchlight optional.",
         missions: [
-          {
-            target: "Comet",
-            question: "What’s the worst Christmas present you’ve ever received?"
-          },
-          {
-            target: "Vixen",
-            question: "If you were an elf, what would your elf name be?"
-          },
-          {
-            target: "Dancer",
-            question: "What’s the best thing that’s happened to you this month?"
-          },
-          {
-            target: "Donner",
-            question: "What are you most looking forward to doing over the Christmas break?"
-          }
+          { target: "Comet",  question: "What’s the worst Christmas present you’ve ever received?" },
+          { target: "Vixen",  question: "If you were an elf, what would your elf name be?" },
+          { target: "Dancer", question: "What’s the best thing that’s happened to you this month?" },
+          { target: "Donner", question: "What are you most looking forward to doing over the Christmas break?" }
         ]
       },
       "Dancer": {
@@ -447,22 +391,10 @@
         traits: "Graceful · lively · charming",
         missionsNote: "You’re here to get people moving their mouths, not just their feet.",
         missions: [
-          {
-            target: "Comet",
-            question: "What’s your strangest family Christmas tradition?"
-          },
-          {
-            target: "Vixen",
-            question: "What’s the worst Christmas present you’ve ever received?"
-          },
-          {
-            target: "Prancer",
-            question: "If you were an elf, what would your elf name be?"
-          },
-          {
-            target: "Rudolph",
-            question: "What are you most looking forward to doing over the Christmas break?"
-          }
+          { target: "Comet",  question: "What’s your strangest family Christmas tradition?" },
+          { target: "Vixen",  question: "What’s the worst Christmas present you’ve ever received?" },
+          { target: "Prancer",question: "If you were an elf, what would your elf name be?" },
+          { target: "Rudolph",question: "What are you most looking forward to doing over the Christmas break?" }
         ]
       },
       "Prancer": {
@@ -470,22 +402,10 @@
         traits: "Proud · elegant · spirited",
         missionsNote: "Majestic small talk only, please.",
         missions: [
-          {
-            target: "Comet",
-            question: "What’s the best thing that’s happened to you this month?"
-          },
-          {
-            target: "Vixen",
-            question: "What’s your strangest family Christmas tradition?"
-          },
-          {
-            target: "Blitzen",
-            question: "What’s the worst Christmas present you’ve ever received?"
-          },
-          {
-            target: "Dancer",
-            question: "What are you most looking forward to doing over the Christmas break?"
-          }
+          { target: "Comet",  question: "What’s the best thing that’s happened to you this month?" },
+          { target: "Vixen",  question: "What’s your strangest family Christmas tradition?" },
+          { target: "Blitzen",question: "What’s the worst Christmas present you’ve ever received?" },
+          { target: "Dancer", question: "What are you most looking forward to doing over the Christmas break?" }
         ]
       },
       "Blitzen": {
@@ -493,22 +413,10 @@
         traits: "Energetic · electric · fearless",
         missionsNote: "Lightning round: four reindeer, four questions.",
         missions: [
-          {
-            target: "Comet",
-            question: "If you were an elf, what would your elf name be?"
-          },
-          {
-            target: "Vixen",
-            question: "What’s the best thing that’s happened to you this month?"
-          },
-          {
-            target: "Rudolph",
-            question: "What’s your strangest family Christmas tradition?"
-          },
-          {
-            target: "Donner",
-            question: "What are you most looking forward to doing over the Christmas break?"
-          }
+          { target: "Comet",  question: "If you were an elf, what would your elf name be?" },
+          { target: "Vixen",  question: "What’s the best thing that’s happened to you this month?" },
+          { target: "Rudolph",question: "What’s your strangest family Christmas tradition?" },
+          { target: "Donner", question: "What are you most looking forward to doing over the Christmas break?" }
         ]
       },
       "Dasher": {
@@ -516,22 +424,10 @@
         traits: "Fast · confident · daring",
         missionsNote: "You only need four chats. Make them quick and good.",
         missions: [
-          {
-            target: "Comet",
-            question: "What’s the best thing that’s happened to you this month?"
-          },
-          {
-            target: "Vixen",
-            question: "What’s the worst Christmas present you’ve ever received?"
-          },
-          {
-            target: "Rudolph",
-            question: "If you were an elf, what would your elf name be?"
-          },
-          {
-            target: "Donner",
-            question: "What are you most looking forward to doing over the Christmas break?"
-          }
+          { target: "Comet",  question: "What’s the best thing that’s happened to you this month?" },
+          { target: "Vixen",  question: "What’s the worst Christmas present you’ve ever received?" },
+          { target: "Rudolph",question: "If you were an elf, what would your elf name be?" },
+          { target: "Donner", question: "What are you most looking forward to doing over the Christmas break?" }
         ]
       }
     };
@@ -541,7 +437,8 @@
     const selectorGrid = document.getElementById("selector-grid");
     const missionsTitle = document.getElementById("missions-title");
     const missionsSubtitle = document.getElementById("missions-subtitle");
-    const missionsHeading = document.getElementById("missions-heading");
+    const groupHeading = document.getElementById("group-heading");
+    const groupNote = document.getElementById("group-note");
     const missionsNote = document.getElementById("missions-note");
     const missionList = document.getElementById("mission-list");
     const backBtn = document.getElementById("back-btn");
@@ -564,33 +461,34 @@
       "Dasher"
     ];
 
-    function createButtons() {
-  selectorGrid.innerHTML = "";
-
-  order.forEach(name => {
-    const data = REINDEER_DATA[name];
-    const btn = document.createElement("button");
-    btn.type = "button";
-    btn.className = "reindeer-btn";
-    btn.dataset.reindeer = name;
-
-    const line1 = document.createElement("span");
-    line1.className = "name";
-    line1.textContent = name;
-
-    const line2 = document.createElement("span");
-    line2.className = "trait";
-    line2.textContent = `${data.traits} · ${data.count} in herd`;
-
-    btn.appendChild(line1);
-    btn.appendChild(line2);
-
-    btn.addEventListener("click", () => showMissions(name));
-    selectorGrid.appendChild(btn);
-  });
-}
     function pluralise(name, n) {
       return n === 1 ? name : name + "s";
+    }
+
+    function createButtons() {
+      selectorGrid.innerHTML = "";
+
+      order.forEach(name => {
+        const data = REINDEER_DATA[name];
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "reindeer-btn";
+        btn.dataset.reindeer = name;
+
+        const line1 = document.createElement("span");
+        line1.className = "name";
+        line1.textContent = name;
+
+        const line2 = document.createElement("span");
+        line2.className = "trait";
+        line2.textContent = `${data.traits} · ${data.count} in herd`;
+
+        btn.appendChild(line1);
+        btn.appendChild(line2);
+
+        btn.addEventListener("click", () => showMissions(name));
+        selectorGrid.appendChild(btn);
+      });
     }
 
     function showMissions(name) {
@@ -601,12 +499,13 @@
       missionsTitle.textContent = name + " Missions";
       missionsSubtitle.textContent = data.traits;
 
-      missionsHeading.textContent = `${name} herd: ${total} ${pluralise(name, total)} in total`;
-      missionsNote.textContent =
-        (others > 0
-          ? `For your group selfie, you’re looking for ${others} other ${pluralise(name, others)}. `
-          : `You’re the only ${name} tonight – your selfie is just you (make it dramatic). `
-        ) + data.missionsNote;
+      groupHeading.textContent = "Group mission with your " + name + " herd";
+      groupNote.textContent =
+        others > 0
+          ? `There are ${total} ${pluralise(name, total)} in total. For your group selfie, you’re looking for ${others} other ${pluralise(name, others)}.`
+          : `You’re the only ${name} tonight – your “group” selfie is just you. Make it epic.`;
+
+      missionsNote.textContent = data.missionsNote;
 
       missionList.innerHTML = "";
       data.missions.forEach(m => {
