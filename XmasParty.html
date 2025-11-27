@@ -328,6 +328,7 @@
   <script>
     const REINDEER_DATA = {
       "Comet": {
+        count: 16,
         traits: "Strong · reliable · cool",
         missionsNote: "Find one of each of these reindeer types somewhere in the room.",
         missions: [
@@ -350,6 +351,7 @@
         ]
       },
       "Vixen": {
+        count: 15,
         traits: "Sassy · clever · mischievous",
         missionsNote: "Track down these four reindeer types somewhere in the room.",
         missions: [
@@ -372,6 +374,7 @@
         ]
       },
       "Donner": {
+        count: 9,
         traits: "Loyal · bold · thunderous",
         missionsNote: "You’re the thunder – now go stir some conversations.",
         missions: [
@@ -394,6 +397,7 @@
         ]
       },
       "Cupid": {
+        count: 4,
         traits: "Sweet · affectionate · joyful",
         missionsNote: "Spread chaos and wholesomeness in equal measure.",
         missions: [
@@ -416,6 +420,7 @@
         ]
       },
       "Rudolph": {
+        count: 4,
         traits: "Bright · brave · kind",
         missionsNote: "Lead with questions. Torchlight optional.",
         missions: [
@@ -438,6 +443,7 @@
         ]
       },
       "Dancer": {
+        count: 3,
         traits: "Graceful · lively · charming",
         missionsNote: "You’re here to get people moving their mouths, not just their feet.",
         missions: [
@@ -460,6 +466,7 @@
         ]
       },
       "Prancer": {
+        count: 2,
         traits: "Proud · elegant · spirited",
         missionsNote: "Majestic small talk only, please.",
         missions: [
@@ -482,6 +489,7 @@
         ]
       },
       "Blitzen": {
+        count: 2,
         traits: "Energetic · electric · fearless",
         missionsNote: "Lightning round: four reindeer, four questions.",
         missions: [
@@ -504,6 +512,7 @@
         ]
       },
       "Dasher": {
+        count: 1,
         traits: "Fast · confident · daring",
         missionsNote: "You only need four chats. Make them quick and good.",
         missions: [
@@ -579,12 +588,24 @@
       });
     }
 
+    function pluralise(name, n) {
+      return n === 1 ? name : name + "s";
+    }
+
     function showMissions(name) {
       const data = REINDEER_DATA[name];
+      const total = data.count;
+      const others = Math.max(total - 1, 0);
+
       missionsTitle.textContent = name + " Missions";
       missionsSubtitle.textContent = data.traits;
-      missionsHeading.textContent = "Your targets tonight";
-      missionsNote.textContent = data.missionsNote;
+
+      missionsHeading.textContent = `${name} herd: ${total} ${pluralise(name, total)} in total`;
+      missionsNote.textContent =
+        (others > 0
+          ? `For your group selfie, you’re looking for ${others} other ${pluralise(name, others)}. `
+          : `You’re the only ${name} tonight – your selfie is just you (make it dramatic). `
+        ) + data.missionsNote;
 
       missionList.innerHTML = "";
       data.missions.forEach(m => {
